@@ -54,7 +54,7 @@ void signal_callback_handler(int signum) { std::exit(signum); }
 int main(int argc, char **argv) {
 
   // Ensure we have a path, if the user passes it then we should use it
-  std::string config_path = "unset_path_to_config.yaml";
+  std::string config_path = "/home/hoangqc/catkin_ws/src/openvins-lite/config/rpng_sim/estimator_config.yaml";
   if (argc > 1) {
     config_path = argv[1];
   }
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Verbosity
-  std::string verbosity = "INFO";
+  std::string verbosity = "INFO"; //    ALL, DEBUG, INFO, WARNING, ERROR, SILENT
   parser->parse_config("verbosity", verbosity);
   ov_core::Printer::setPrintLevel(verbosity);
 
@@ -150,6 +150,7 @@ int main(int argc, char **argv) {
     bool hasimu = sim->get_next_imu(message_imu.timestamp, message_imu.wm, message_imu.am);
     if (hasimu) {
       sys->feed_measurement_imu(message_imu);
+      std::cout << message_imu.timestamp << "\t gyro: " << message_imu.wm.transpose() << "\t accel: " << message_imu.am.transpose() << "\n";
 #if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
       // TODO: fix this, can be slow at high frequency...
       // viz->visualize_odometry(message_imu.timestamp - sim->get_true_parameters().calib_camimu_dt);

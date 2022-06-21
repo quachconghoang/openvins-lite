@@ -45,6 +45,7 @@ if(TORCH_FOUND)
     find_package( CUDA REQUIRED )
     message(STATUS "Found CUDA ${CUDA_VERSION_STRING} at ${CUDA_TOOLKIT_ROOT_DIR}")
     set(CUDA_NVCC_FLAGS "-gencode arch=compute_75,code=sm_75;-rdc=true;-use_fast_math")
+#    set(CUDA_NVCC_FLAGS "-gencode arch=compute_72,code=sm_72;-rdc=true;-use_fast_math") # Jetson AGX Xavier
     include_directories(
             ${CUDA_INCLUDE_DIRS}
             ${TORCH_INCLUDE_DIRS})

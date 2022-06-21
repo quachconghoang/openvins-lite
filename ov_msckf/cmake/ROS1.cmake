@@ -125,13 +125,13 @@ if (catkin_FOUND AND ENABLE_ROS)
 
 endif ()
 
-# add_executable(run_simulation src/run_simulation.cpp)
-# target_link_libraries(run_simulation ov_msckf_lib ${thirdparty_libraries})
-# install(TARGETS run_simulation
-#        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+ add_executable(run_simulation src/run_simulation.cpp)
+ target_link_libraries(run_simulation ov_msckf_lib ${thirdparty_libraries})
+ install(TARGETS run_simulation
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
 
 ##################################################
 # Launch files!
