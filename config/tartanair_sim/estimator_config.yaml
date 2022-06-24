@@ -1,5 +1,12 @@
 %YAML:1.0 # need to specify the file type at the top!
 
+# ------------- NOTE --------------
+# https://github.com/castacks/tartanair_tools/blob/master/data_type.md
+# The unit of the depth value is meter.
+# The baseline between the left and right cameras is 0.25m.
+# Disparity = 80.0 / depth
+
+
 verbosity: "WARNING" # ALL, DEBUG, INFO, WARNING, ERROR, SILENT
 
 use_fej: true # if we should use first-estimate Jacobians (enable for good consistency)
@@ -120,7 +127,7 @@ sim_seed_state_init: 0
 sim_seed_preturb: 0
 sim_seed_measurements: 0
 sim_do_perturbation: false
-sim_traj_path: "/home/hoangqc/catkin_ws/src/openvins-lite/ov_data/sim/euroc_V1_01_easy.txt"
+sim_traj_path: "/home/hoangqc/catkin_ws/src/openvins-lite/ov_data/sim/tartanAIR_office_004_left.txt"
 sim_distance_threshold: 1.2
 # sim_freq_cam: 10
 # sim_freq_imu: 400

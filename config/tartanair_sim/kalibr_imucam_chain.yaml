@@ -3,7 +3,7 @@
 cam0:
   T_imu_cam: #rotation from camera to IMU, position of IMU in camera
     - [0.0, -1.0, 0.0, 0.0]
-    - [1.0, 0.0, 0.0, -0.05]
+    - [1.0, 0.0, 0.0, 0.0]
     - [0.0, 0.0, 0.1, 0.0]
     - [0.0, 0.0, 0.0, 1.0]
   cam_overlaps: [1]
@@ -16,7 +16,7 @@ cam0:
 cam1:
   T_imu_cam: #rotation from camera to IMU, position of IMU in camera
     - [0.0, -1.0, 0.0, 0.0]
-    - [1.0, 0.0, 0.0, 0.05]
+    - [1.0, 0.0, 0.0, 0.25]
     - [0.0, 0.0, 0.1, 0.0]
     - [0.0, 0.0, 0.0, 1.0]
   cam_overlaps: [0]
