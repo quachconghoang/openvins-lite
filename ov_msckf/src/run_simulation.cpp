@@ -54,7 +54,9 @@ void signal_callback_handler(int signum) { std::exit(signum); }
 int main(int argc, char **argv) {
 
   // Ensure we have a path, if the user passes it then we should use it
-  std::string config_path = "/home/hoangqc/catkin_ws/src/openvins-lite/config/rpng_sim/estimator_config.yaml";
+  std::string config_path = "/home/hoangqc/catkin_ws/src/openvins-lite/config/tartanair_sim/estimator_config.yaml";
+  std::string imu_save_path = "/home/hoangqc/catkin_ws/tmp/sim/tartan_imu.txt";
+  std::ofstream out_file;
   if (argc > 1) {
     config_path = argv[1];
   }
@@ -64,22 +66,24 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "run_simulation");
   auto nh = std::make_shared<ros::NodeHandle>("~");
   nh->param<std::string>("config_path", config_path, config_path);
-#elif ROS_AVAILABLE == 2
+//#elif ROS_AVAILABLE == 2
   // Launch our ros node
-  rclcpp::init(argc, argv);
-  rclcpp::NodeOptions options;
-  options.allow_undeclared_parameters(true);
-  options.automatically_declare_parameters_from_overrides(true);
-  auto node = std::make_shared<rclcpp::Node>("run_simulation", options);
-  node->get_parameter<std::string>("config_path", config_path);
+//  rclcpp::init(argc, argv);
+//  rclcpp::NodeOptions options;
+//  options.allow_undeclared_parameters(true);
+//  options.automatically_declare_parameters_from_overrides(true);
+//  auto node = std::make_shared<rclcpp::Node>("run_simulation", options);
+//  node->get_parameter<std::string>("config_path", config_path);
 #endif
 
   // Load the config
+  string mess = RED "Config path: " + config_path + "\n";
+  PRINT_WARNING( mess.c_str());
   auto parser = std::make_shared<ov_core::YamlParser>(config_path);
 #if ROS_AVAILABLE == 1
   parser->set_node_handler(nh);
-#elif ROS_AVAILABLE == 2
-  parser->set_node(node);
+//#elif ROS_AVAILABLE == 2
+//  parser->set_node(node);
 #endif
 
   // Verbosity
@@ -96,8 +100,8 @@ int main(int argc, char **argv) {
   sys = std::make_shared<VioManager>(params);
 #if ROS_AVAILABLE == 1
   viz = std::make_shared<ROS1Visualizer>(nh, sys, sim);
-#elif ROS_AVAILABLE == 2
-  viz = std::make_shared<ROS2Visualizer>(node, sys, sim);
+//#elif ROS_AVAILABLE == 2
+//  viz = std::make_shared<ROS2Visualizer>(node, sys, sim);
 #endif
 
   // Ensure we read in all parameters required
@@ -135,22 +139,32 @@ int main(int argc, char **argv) {
   std::vector<int> buffer_camids;
   std::vector<std::vector<std::pair<size_t, Eigen::VectorXf>>> buffer_feats;
 
+    int imu_count = 0;
+    out_file.open(imu_save_path);
+
   // Step through the rosbag
 #if ROS_AVAILABLE == 1
   while (sim->ok() && ros::ok()) {
-#elif ROS_AVAILABLE == 2
-  while (sim->ok() && rclcpp::ok()) {
-#else
-  signal(SIGINT, signal_callback_handler);
-  while (sim->ok()) {
+//#elif ROS_AVAILABLE == 2
+//  while (sim->ok() && rclcpp::ok()) {
+//#else
+//  signal(SIGINT, signal_callback_handler);
+//  while (sim->ok()) {
 #endif
 
     // IMU: get the next simulated IMU measurement if we have it
     ov_core::ImuData message_imu;
     bool hasimu = sim->get_next_imu(message_imu.timestamp, message_imu.wm, message_imu.am);
+
     if (hasimu) {
-      sys->feed_measurement_imu(message_imu);
-      std::cout << message_imu.timestamp << "\t gyro: " << message_imu.wm.transpose() << "\t accel: " << message_imu.am.transpose() << "\n";
+        imu_count++;
+        out_file << std::fixed << message_imu.timestamp << "\t"
+                << message_imu.wm[0] << "\t" << message_imu.wm[1] << "\t" << message_imu.wm[2]<< "\t"
+                << message_imu.am[0] << "\t" << message_imu.am[1] << "\t" << message_imu.am[2]<< "\n";
+
+        sys->feed_measurement_imu(message_imu);
+//w_RS_S_x [rad s^-1]	w_RS_S_y [rad s^-1]	w_RS_S_z [rad s^-1]	a_RS_S_x [m s^-2]	a_RS_S_y [m s^-2]	a_RS_S_z [m s^-2]
+//        std::cout<< imu_count << " - " << message_imu.timestamp << "\t gyro: " << message_imu.wm.transpose() << "\t accel: " << message_imu.am.transpose() << "\n";
 #if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
       // TODO: fix this, can be slow at high frequency...
       // viz->visualize_odometry(message_imu.timestamp - sim->get_true_parameters().calib_camimu_dt);
@@ -164,13 +178,14 @@ int main(int argc, char **argv) {
     bool hascam = sim->get_next_cam(time_cam, camids, feats);
     if (hascam) {
       if (buffer_timecam != -1) {
-#if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
-        viz->visualize_odometry(buffer_timecam);
-#endif
+//#if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
+//        viz->visualize_odometry(buffer_timecam);
+//#endif
         sys->feed_measurement_simulation(buffer_timecam, buffer_camids, buffer_feats);
-#if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
-        viz->visualize();
-#endif
+//#if ROS_AVAILABLE == 1 || ROS_AVAILABLE == 2
+//        viz->visualize();
+//#endif
+
       }
       buffer_timecam = time_cam;
       buffer_camids = camids;
@@ -182,9 +197,9 @@ int main(int argc, char **argv) {
 #if ROS_AVAILABLE == 1
   viz->visualize_final();
   ros::shutdown();
-#elif ROS_AVAILABLE == 2
-  viz->visualize_final();
-  rclcpp::shutdown();
+//#elif ROS_AVAILABLE == 2
+//  viz->visualize_final();
+//  rclcpp::shutdown();
 #endif
 
   // Done!
