@@ -16,9 +16,9 @@ use_rk4int: true # if rk4 integration should be used (overrides imu averaging)
 use_stereo: true # if we have more than 1 camera, if we should try to track stereo constraints
 max_cameras: 2
 
-calib_cam_extrinsics: true
-calib_cam_intrinsics: true
-calib_cam_timeoffset: true
+calib_cam_extrinsics: false
+calib_cam_intrinsics: false
+calib_cam_timeoffset: false
 
 max_clones: 11
 max_slam: 50
