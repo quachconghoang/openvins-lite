@@ -140,6 +140,7 @@ int main(int argc, char **argv) {
   std::vector<std::vector<std::pair<size_t, Eigen::VectorXf>>> buffer_feats;
 
     int imu_count = 0;
+    imu_save_path = params.sim_imu_save_path;
     out_file.open(imu_save_path);
 
   // Step through the rosbag

@@ -432,6 +432,7 @@ struct VioManagerOptions {
 
   /// Path to the trajectory we will b-spline and simulate on. Should be time(s),pos(xyz),ori(xyzw) format.
   std::string sim_traj_path = "src/open_vins/ov_data/sim/udel_gore.txt";
+  std::string sim_imu_save_path = "src/open_vins/ov_data/sim/imu.txt";
 
   /// We will start simulating after we have moved this much along the b-spline. This prevents static starts as we init from groundtruth in
   /// simulation.
@@ -462,6 +463,7 @@ struct VioManagerOptions {
       parser->parse_config("sim_seed_measurements", sim_seed_measurements);
       parser->parse_config("sim_do_perturbation", sim_do_perturbation);
       parser->parse_config("sim_traj_path", sim_traj_path);
+      parser->parse_config("sim_imu_save_path", sim_imu_save_path);
       parser->parse_config("sim_distance_threshold", sim_distance_threshold);
       parser->parse_config("sim_freq_cam", sim_freq_cam);
       parser->parse_config("sim_freq_imu", sim_freq_imu);
