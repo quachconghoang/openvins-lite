@@ -11,8 +11,8 @@
     <arg name="max_cameras" default="2" />
     <arg name="use_stereo"  default="true" />
     <arg name="bag_start"   default="0" /> <!-- v1-2: 0, mh1: 40, mh2: 35, mh3: 17.5, mh4-5: 15 -->
-    <arg name="dataset"     default="office_004" /> <!-- V1_01_easy, V1_02_medium, V2_02_medium -->
-<!--    neighborhood_000, office_004-->
+    <arg name="dataset"     default="oldtown_000" /> <!-- V1_01_easy, V1_02_medium, V2_02_medium -->
+<!--    neighborhood_000, office_004, carwelding_001, carwelding_002-->
     <arg name="bag"         default="$(arg home_dir)/Datasets/TartanAIR/$(arg dataset).bag" />
     <!--    <arg name="bag"         default="/media/patrick/RPNG FLASH 3/$(arg config)/$(arg dataset).bag" />-->
 <!--    <arg name="bag"         default="/datasets/$(arg config)/$(arg dataset).bag" />-->
