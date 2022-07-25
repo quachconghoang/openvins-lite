@@ -21,7 +21,7 @@
     <arg name="freq_cam"    default="10" />
     <arg name="freq_imu"    default="400" />
 
-    <arg name="dataset"    default="tartanAIR_office_004_left.txt" /> <!-- udel_gore, udel_gore_zupt, tum_corridor1_512_16_okvis, udel_arl -->
+<!--    <arg name="dataset"    default="tartanAIR_office_004_left.txt" /> &lt;!&ndash; udel_gore, udel_gore_zupt, tum_corridor1_512_16_okvis, udel_arl &ndash;&gt;-->
 
     <!-- if we should perturb the initial state values (i.e. calibration) -->
     <arg name="sim_do_perturbation" default="false" />

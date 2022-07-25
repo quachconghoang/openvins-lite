@@ -127,9 +127,9 @@ sim_seed_state_init: 0
 sim_seed_preturb: 0
 sim_seed_measurements: 0
 sim_do_perturbation: false
-sim_traj_path: "/home/hoangqc/catkin_ws/src/openvins-lite/ov_data/sim/tartanair/seasidetown_000.txt"
-sim_imu_save_path: "/home/hoangqc/catkin_ws/tmp/sim/seasidetown_000_imu.txt"
-sim_distance_threshold: 0.3
+sim_traj_path: "/home/hoangqc/catkin_ws/tmp/sim/oldtown_000/pose_gt.txt"
+sim_imu_save_path: "/home/hoangqc/catkin_ws/tmp/sim/oldtown_000/imu.txt"
+sim_distance_threshold: 0.1
 # sim_freq_cam: 10
 # sim_freq_imu: 400
 sim_freq_cam: 20
