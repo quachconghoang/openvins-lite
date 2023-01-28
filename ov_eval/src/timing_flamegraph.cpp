@@ -49,13 +49,9 @@ int main(int argc, char **argv) {
   // Ensure we have a path
   if (argc < 2) {
     PRINT_ERROR(RED "ERROR: Please specify a timing file\n" RESET);
-    PRINT_ERROR(RED "ERROR: ./timing_flamegraph <file_times.txt> <subsample>\n" RESET);
-    PRINT_ERROR(RED "ERROR: rosrun ov_eval timing_flamegraph <file_times.txt> <subsample>\n" RESET);
+    PRINT_ERROR(RED "ERROR: ./timing_flamegraph <file_times.txt>\n" RESET);
+    PRINT_ERROR(RED "ERROR: rosrun ov_eval timing_flamegraph <file_times.txt>\n" RESET);
     std::exit(EXIT_FAILURE);
-  }
-  int keep_every = 10;
-  if (argc == 3) {
-    keep_every = atoi(argv[2]);
   }
 
   // Load it!!
@@ -88,6 +84,7 @@ int main(int argc, char **argv) {
 #ifdef HAVE_PYTHONLIBS
 
   // Sub-sample the time
+  int keep_every = 10;
   std::vector<double> times_skipped;
   for (size_t t = 0; t < times.size(); t++) {
     if (t % keep_every == 0) {
@@ -103,7 +100,7 @@ int main(int argc, char **argv) {
   }
 
   // Valid colors
-  // https://matplotlib.org/stable/tutorials/colors/colors.html
+  // https://matplotlib.org/tutorials/colors/colors.html
   // std::vector<std::string> colors_valid = {"blue","aqua","lightblue","lightgreen","yellowgreen","green"};
   std::vector<std::string> colors_valid = {"navy", "blue", "lightgreen", "green", "gold", "goldenrod"};
 

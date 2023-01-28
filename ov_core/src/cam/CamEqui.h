@@ -98,8 +98,6 @@ public:
    */
   CamEqui(int width, int height) : CamBase(width, height) {}
 
-  ~CamEqui() {}
-
   /**
    * @brief Given a raw uv point, this will undistort it based on the camera matrices into normalized camera coords.
    * @param uv_dist Raw uv coordinate we wish to undistort

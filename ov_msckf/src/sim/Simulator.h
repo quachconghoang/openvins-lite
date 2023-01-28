@@ -30,11 +30,14 @@
 #include <string>
 #include <unordered_map>
 
-#include "core/VioManagerOptions.h"
+#include "cam/CamBase.h"
+#include "cam/CamEqui.h"
+#include "cam/CamRadtan.h"
+#include "sim/BsplineSE3.h"
+#include "utils/colors.h"
+#include "utils/dataset_reader.h"
 
-namespace ov_core {
-class BsplineSE3;
-} // namespace ov_core
+#include "core/VioManagerOptions.h"
 
 namespace ov_msckf {
 
@@ -155,7 +158,7 @@ protected:
   std::vector<Eigen::VectorXd> traj_data;
 
   /// Our b-spline trajectory
-  std::shared_ptr<ov_core::BsplineSE3> spline;
+  ov_core::BsplineSE3 spline;
 
   /// Our map of 3d features
   size_t id_map = 0;
@@ -196,7 +199,6 @@ protected:
   Eigen::Vector3d true_bias_gyro = Eigen::Vector3d::Zero();
 
   // Our history of true biases
-  bool has_skipped_first_bias = false;
   std::vector<double> hist_true_bias_time;
   std::vector<Eigen::Vector3d> hist_true_bias_accel;
   std::vector<Eigen::Vector3d> hist_true_bias_gyro;

@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
 # Source our workspace directory to load ENV variables
-SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source ${SCRIPT_DIR}/../../../../devel/setup.bash
+source /home/patrick/workspace/catkin_ws_ov/devel/setup.bash
+
 
 #=============================================================
 #=============================================================
 #=============================================================
+
 
 # estimator configurations
 modes=(
-#    "mono" # has scale issues, need to debug (imu intrinsics?)!!
-#    "binocular" # has scale issues, need to debug (imu intrinsics?)!!
+    "mono"
+    "binocular"
     "stereo"
 )
 
@@ -46,31 +47,31 @@ bagstarttimes=(
     "0"
 )
 
+
+
 # location to save log files into
-save_path1="/home/patrick/github/pubs_data/pgeneva/2022_openvins_test/exp_kaistvio/algorithms"
-save_path2="/home/patrick/github/pubs_data/pgeneva/2022_openvins_test/exp_kaistvio/timings"
-bag_path="/media/patrick/RPNG FLASH 3/kaist_vio/"
-ov_ver="2.6.2"
-
-
+save_path1="/home/patrick/github/pubs_data/pgeneva/2020_openvins_2.3.1/exp_kaistvio/algorithms"
+save_path2="/home/patrick/github/pubs_data/pgeneva/2020_openvins_2.3.1/exp_kaistvio/timings"
+bag_path="/media/patrick/RPNG\ FLASH\ 3/KAIST_VIO"
 
 #=============================================================
 #=============================================================
 #=============================================================
 
-# Loop through all datasets
-for i in "${!bagnames[@]}"; do
+
 # Loop through all modes
 for h in "${!modes[@]}"; do
+# Loop through all datasets
+for i in "${!bagnames[@]}"; do
 
 # Monte Carlo runs for this dataset
 # If you want more runs, change the below loop
-for j in {00..00}; do
+for j in {00..04}; do
 
 # start timing
 start_time="$(date -u +%s)"
-filename_est="$save_path1/ov_${ov_ver}_${modes[h]}/${bagnames[i]}/${j}_estimate.txt"
-filename_time="$save_path2/ov_${ov_ver}_${modes[h]}/${bagnames[i]}/${j}_timing.txt"
+filename_est="$save_path1/ov_2.3.3_${modes[h]}/${bagnames[i]}/${j}_estimate.txt"
+filename_time="$save_path2/ov_2.3.3_${modes[h]}/${bagnames[i]}/${j}_timing.txt"
 
 # number of cameras
 if [ "${modes[h]}" == "mono" ]
@@ -90,20 +91,16 @@ then
 fi
 
 # run our ROS launch file (note we send console output to terminator)
-# subscribe=live pub, serial=read from bag (fast)
-roslaunch ov_msckf serial.launch \
+roslaunch ov_msckf pgeneva_ros_kaistvio.launch \
   max_cameras:="$temp1" \
   use_stereo:="$temp2" \
-  config:="kaist_vio" \
-  dataset:="${bagnames[i]}" \
   bag:="$bag_path/${bagnames[i]}.bag" \
   bag_start:="${bagstarttimes[i]}" \
-  dobag:="true" \
   dosave:="true" \
   path_est:="$filename_est" \
   dotime:="true" \
-  dolivetraj:="true" \
   path_time:="$filename_time" &> /dev/null
+
 
 # print out the time elapsed
 end_time="$(date -u +%s)"

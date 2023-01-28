@@ -60,14 +60,10 @@ endif ()
 
 list(APPEND LIBRARY_SOURCES
         src/dummy.cpp
-        src/ceres/Factor_GenericPrior.cpp
-        src/ceres/Factor_ImageReprojCalib.cpp
-        src/ceres/Factor_ImuCPIv1.cpp
-        src/ceres/State_JPLQuatLocal.cpp
         src/init/InertialInitializer.cpp
         src/dynamic/DynamicInitializer.cpp
         src/static/StaticInitializer.cpp
-        src/sim/SimulatorInit.cpp
+        src/sim/Simulator.cpp
 )
 file(GLOB_RECURSE LIBRARY_HEADERS "src/*.h")
 add_library(ov_init_lib SHARED ${LIBRARY_SOURCES} ${LIBRARY_HEADERS})
@@ -88,28 +84,11 @@ install(DIRECTORY src/
 # Make binary files!
 ##################################################
 
-add_executable(test_simulation src/test_simulation.cpp)
-target_link_libraries(test_simulation ov_init_lib ${thirdparty_libraries})
-install(TARGETS test_simulation
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
-add_executable(test_dynamic_mle src/test_dynamic_mle.cpp)
-target_link_libraries(test_dynamic_mle ov_init_lib ${thirdparty_libraries})
-install(TARGETS test_dynamic_mle
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
-add_executable(test_dynamic_init src/test_dynamic_init.cpp)
-target_link_libraries(test_dynamic_init ov_init_lib ${thirdparty_libraries})
-install(TARGETS test_dynamic_init
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
+#add_executable(test_simulation src/test_simulation.cpp)
+#target_link_libraries(test_simulation ov_init_lib ${thirdparty_libraries})
+#install(TARGETS test_simulation
+#        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 

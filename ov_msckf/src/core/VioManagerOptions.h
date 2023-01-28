@@ -24,14 +24,13 @@
 
 #include <Eigen/Eigen>
 #include <iostream>
-#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
 
+#include "state/Propagator.h"
 #include "state/StateOptions.h"
 #include "update/UpdaterOptions.h"
-#include "utils/NoiseManager.h"
 
 #include "init/InertialInitializerOptions.h"
 
@@ -131,7 +130,7 @@ struct VioManagerOptions {
   // NOISE / CHI2 ============================
 
   /// IMU noise (gyroscope and accelerometer)
-  NoiseManager imu_noises;
+  Propagator::NoiseManager imu_noises;
 
   /// Update options for MSCKF features (pixel noise and chi2 multiplier)
   UpdaterOptions msckf_options;
@@ -332,14 +331,8 @@ struct VioManagerOptions {
   /// Will half the resolution all tracking image (aruco will be 1/4 instead of halved if dowsize_aruoc also enabled)
   bool downsample_cameras = false;
 
-  /// Threads our front-end should try to use (opencv uses this also)
-  int num_opencv_threads = 4;
-
-  /// If our ROS image publisher should be async (if sim this should be no!)
-  bool use_multi_threading_pubs = true;
-
-  /// If our ROS subscriber callbacks should be async (if sim and serial then this should be no!)
-  bool use_multi_threading_subs = false;
+  /// If our front-end should try to use some multi-threading for stereo matching
+  bool use_multi_threading = true;
 
   /// The number of points we should extract and track in *each* image frame. This highly effects the computation required for tracking.
   int num_pts = 150;
@@ -381,9 +374,7 @@ struct VioManagerOptions {
       parser->parse_config("use_aruco", use_aruco);
       parser->parse_config("downsize_aruco", downsize_aruco);
       parser->parse_config("downsample_cameras", downsample_cameras);
-      parser->parse_config("num_opencv_threads", num_opencv_threads);
-      parser->parse_config("multi_threading_pubs", use_multi_threading_pubs, false);
-      parser->parse_config("multi_threading_subs", use_multi_threading_subs, false);
+      parser->parse_config("multi_threading", use_multi_threading);
       parser->parse_config("num_pts", num_pts);
       parser->parse_config("fast_threshold", fast_threshold);
       parser->parse_config("grid_x", grid_x);
@@ -413,9 +404,7 @@ struct VioManagerOptions {
     PRINT_DEBUG("  - use_aruco: %d\n", use_aruco);
     PRINT_DEBUG("  - downsize aruco: %d\n", downsize_aruco);
     PRINT_DEBUG("  - downsize cameras: %d\n", downsample_cameras);
-    PRINT_DEBUG("  - num opencv threads: %d\n", num_opencv_threads);
-    PRINT_DEBUG("  - use multi-threading pubs: %d\n", use_multi_threading_pubs);
-    PRINT_DEBUG("  - use multi-threading subs: %d\n", use_multi_threading_subs);
+    PRINT_DEBUG("  - use multi-threading: %d\n", use_multi_threading);
     PRINT_DEBUG("  - num_pts: %d\n", num_pts);
     PRINT_DEBUG("  - fast threshold: %d\n", fast_threshold);
     PRINT_DEBUG("  - grid X by Y: %d by %d\n", grid_x, grid_y);
@@ -443,6 +432,7 @@ struct VioManagerOptions {
 
   /// Path to the trajectory we will b-spline and simulate on. Should be time(s),pos(xyz),ori(xyzw) format.
   std::string sim_traj_path = "src/open_vins/ov_data/sim/udel_gore.txt";
+  std::string sim_imu_save_path = "src/open_vins/ov_data/sim/imu.txt";
 
   /// We will start simulating after we have moved this much along the b-spline. This prevents static starts as we init from groundtruth in
   /// simulation.
@@ -473,6 +463,7 @@ struct VioManagerOptions {
       parser->parse_config("sim_seed_measurements", sim_seed_measurements);
       parser->parse_config("sim_do_perturbation", sim_do_perturbation);
       parser->parse_config("sim_traj_path", sim_traj_path);
+      parser->parse_config("sim_imu_save_path", sim_imu_save_path);
       parser->parse_config("sim_distance_threshold", sim_distance_threshold);
       parser->parse_config("sim_freq_cam", sim_freq_cam);
       parser->parse_config("sim_freq_imu", sim_freq_imu);

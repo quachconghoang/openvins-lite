@@ -142,14 +142,6 @@ install(TARGETS error_simulation
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-add_executable(timing_comparison src/timing_comparison.cpp)
-target_link_libraries(timing_comparison ov_eval_lib ${thirdparty_libraries})
-install(TARGETS timing_comparison
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
 add_executable(timing_flamegraph src/timing_flamegraph.cpp)
 target_link_libraries(timing_flamegraph ov_eval_lib ${thirdparty_libraries})
 install(TARGETS timing_flamegraph
@@ -158,9 +150,9 @@ install(TARGETS timing_flamegraph
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-add_executable(timing_histogram src/timing_histogram.cpp)
-target_link_libraries(timing_histogram ov_eval_lib ${thirdparty_libraries})
-install(TARGETS timing_histogram
+add_executable(timing_comparison src/timing_comparison.cpp)
+target_link_libraries(timing_comparison ov_eval_lib ${thirdparty_libraries})
+install(TARGETS timing_comparison
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
