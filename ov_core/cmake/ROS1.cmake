@@ -42,6 +42,8 @@ list(APPEND thirdparty_libraries
 
 list(APPEND LIBRARY_SOURCES
         src/dummy.cpp
+        src/cpi/CpiV1.cpp
+        src/cpi/CpiV2.cpp
         src/sim/BsplineSE3.cpp
         src/track/TrackBase.cpp
         src/track/TrackAruco.cpp
@@ -50,6 +52,7 @@ list(APPEND LIBRARY_SOURCES
         src/track/TrackSIM.cpp
         src/types/Landmark.cpp
         src/feat/Feature.cpp
+        src/feat/FeatureDatabase.cpp
         src/feat/FeatureInitializer.cpp
         src/utils/print.cpp
 )
@@ -71,25 +74,25 @@ install(DIRECTORY src/
 # Make binary files!
 ##################################################
 
-#if (catkin_FOUND AND ENABLE_ROS)
-#
-#    add_executable(test_tracking src/test_tracking.cpp)
-#    target_link_libraries(test_tracking ov_core_lib ${thirdparty_libraries})
-#    install(TARGETS test_tracking
-#            ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#            LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#            RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#    )
-#
-#endif ()
+if (catkin_FOUND AND ENABLE_ROS)
 
-#add_executable(test_webcam src/test_webcam.cpp)
-#target_link_libraries(test_webcam ov_core_lib ${thirdparty_libraries})
-#install(TARGETS test_webcam
-#        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#)
+    add_executable(test_tracking src/test_tracking.cpp)
+    target_link_libraries(test_tracking ov_core_lib ${thirdparty_libraries})
+    install(TARGETS test_tracking
+            ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+            LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+            RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    )
+
+endif ()
+
+add_executable(test_webcam src/test_webcam.cpp)
+target_link_libraries(test_webcam ov_core_lib ${thirdparty_libraries})
+install(TARGETS test_webcam
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 
 
