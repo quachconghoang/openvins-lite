@@ -477,6 +477,7 @@ struct VioManagerOptions {
       parser->parse_config("sim_seed_measurements", sim_seed_measurements);
       parser->parse_config("sim_do_perturbation", sim_do_perturbation);
       parser->parse_config("sim_traj_path", sim_traj_path);
+      parser->parse_config("sim_imu_save_path", sim_imu_save_path);
       parser->parse_config("sim_distance_threshold", sim_distance_threshold);
       parser->parse_config("sim_freq_cam", sim_freq_cam);
       parser->parse_config("sim_freq_imu", sim_freq_imu);

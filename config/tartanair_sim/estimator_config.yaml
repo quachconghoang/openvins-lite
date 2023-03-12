@@ -1,12 +1,5 @@
 %YAML:1.0 # need to specify the file type at the top!
 
-# ------------- NOTE --------------
-# https://github.com/castacks/tartanair_tools/blob/master/data_type.md
-# The unit of the depth value is meter.
-# The baseline between the left and right cameras is 0.25m.
-# Disparity = 80.0 / depth
-
-
 verbosity: "WARNING" # ALL, DEBUG, INFO, WARNING, ERROR, SILENT
 
 use_fej: true # if we should use first-estimate Jacobians (enable for good consistency)
@@ -23,7 +16,7 @@ calib_cam_timeoffset: false
 max_clones: 11
 max_slam: 50
 max_slam_in_update: 25
-max_msckf_in_update: 10
+max_msckf_in_update: 40
 dt_slam_delay: 2
 
 gravity_mag: 9.81
@@ -49,21 +42,22 @@ init_imu_thresh: 1.0
 init_max_disparity: 1.5
 init_max_features: 15
 
+init_dyn_use: false # if dynamic initialization should be used
 init_dyn_mle_opt_calib: false # if we should optimize calibration during intialization (not recommended)
 init_dyn_mle_max_iter: 50 # how many iterations the MLE refinement should use (zero to skip the MLE)
-init_dyn_mle_max_time: 0.5 # how many seconds the MLE should be completed in
+init_dyn_mle_max_time: 0.05 # how many seconds the MLE should be completed in
 init_dyn_mle_max_threads: 6 # how many threads the MLE should use
 init_dyn_num_pose: 6 # number of poses to use within our window time (evenly spaced)
-init_dyn_min_deg: 15.0 # orientation change needed to try to init
+init_dyn_min_deg: 10.0 # orientation change needed to try to init
 
 init_dyn_inflation_ori: 10 # what to inflate the recovered q_GtoI covariance by
 init_dyn_inflation_vel: 100 # what to inflate the recovered v_IinG covariance by
 init_dyn_inflation_bg: 10 # what to inflate the recovered bias_g covariance by
 init_dyn_inflation_ba: 100 # what to inflate the recovered bias_a covariance by
-init_dyn_min_rec_cond: 1e-15 # reciprocal condition number thresh for info inversion
+init_dyn_min_rec_cond: 1e-12 # reciprocal condition number thresh for info inversion
 
-init_dyn_bias_g: [0.0, 0.0, 0.0] # initial gyroscope bias guess
-init_dyn_bias_a: [0.0, 0.0, 0.0] # initial accelerometer bias guess
+init_dyn_bias_g: [ 0.0, 0.0, 0.0 ] # initial gyroscope bias guess
+init_dyn_bias_a: [ 0.0, 0.0, 0.0 ] # initial accelerometer bias guess
 
 # ==================================================================
 # ==================================================================
@@ -92,6 +86,7 @@ track_frequency: 21.0
 downsample_cameras: false
 multi_threading: false
 histogram_method: "HISTOGRAM" # NONE, HISTOGRAM, CLAHE
+num_opencv_threads: 4
 
 # aruco tag tracker for the system
 # DICT_6X6_1000 from https://chev.me/arucogen/
